@@ -1,0 +1,50 @@
+﻿@model List<DataAccessLayer.Models.Instructor>
+
+@{
+    ViewData["Title"] = "Instructors";
+    string deptName = Model.Any() ? Model[0].Department.Name : "";
+}
+
+<h1>Instructors in @deptName</h1>
+
+<a asp-controller="Department" asp-action="Index" class="btn btn-secondary btn-sm mb-3">
+    &larr; Back to Departments
+</a>
+
+@if (!Model.Any())
+{
+    <p>No instructors found in this department.</p>
+}
+else
+{
+    <table class="table table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Address</th>
+                <th>Salary</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var instructor in Model)
+            {
+                <tr>
+                    <td>@instructor.Id</td>
+                    <td>@instructor.Name</td>
+                    <td>@instructor.Address</td>
+                    <td>@instructor.Salary</td>
+                    <td>
+                        <a asp-controller="Instructor" asp-action="Details" asp-route-id="@instructor.Id"
+                           class="btn btn-info btn-sm">
+                            Details
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+

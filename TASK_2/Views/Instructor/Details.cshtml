@@ -1,0 +1,24 @@
+﻿@model DataAccessLayer.Models.Instructor
+
+@{
+    ViewData["Title"] = "Instructor Details";
+}
+
+<h1>Instructor Details</h1>
+
+<div class="card" style="max-width: 500px;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text"><strong>Id:</strong> @Model.Id</p>
+        <p class="card-text"><strong>Address:</strong> @Model.Address</p>
+        <p class="card-text"><strong>Salary:</strong> @Model.Salary</p>
+        <p class="card-text"><strong>Department:</strong> @Model.Department.Name</p>
+    </div>
+</div>
+
+<a asp-controller="Instructor" asp-action="ByDepartment" asp-route-id="@Model.DepartmentId"
+   class="btn btn-secondary btn-sm mt-3">
+    &larr; Back to Instructor List
+</a>
+
+
