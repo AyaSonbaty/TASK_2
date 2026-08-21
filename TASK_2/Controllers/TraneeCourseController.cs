@@ -1,4 +1,5 @@
 ﻿using BLLayer.Interfaces;
+using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TASK_2.Controllers
@@ -30,7 +31,7 @@ namespace TASK_2.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(TraneeCourseController traneeCourse)
+        public IActionResult Create(TraneeCourse traneeCourse)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +56,7 @@ namespace TASK_2.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(TraneeCourseController traneeCourse)
+        public IActionResult Edit(TraneeCourse traneeCourse)
         {
             if (!ModelState.IsValid)
             {
