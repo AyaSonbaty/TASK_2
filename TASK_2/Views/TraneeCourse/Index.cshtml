@@ -1,5 +1,39 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model List<DataAccessLayer.Models.TraneeCourse>
+
 @{
+    ViewData["Title"] = "Trainee Course Registrations";
 }
+
+<h1>Trainee Course Registrations</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+<a asp-action="Create" class="btn btn-success mb-3">+ Register Trainee</a>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Trainee</th>
+            <th>Course</th>
+            <th>Grade</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var tc in Model)
+        {
+            <tr>
+                <td>@tc.Tranee?.Name</td>
+                <td>@tc.Course?.Name</td>
+                <td>@tc.Grade</td>
+                <td>
+                    <a asp-action="Edit" asp-route-traneeId="@tc.TraneeId" asp-route-courseId="@tc.CourseId"
+                       class="btn btn-sm btn-warning">Edit</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

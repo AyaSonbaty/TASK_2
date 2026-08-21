@@ -1,5 +1,38 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model DataAccessLayer.Models.TraneeCourse
+
 @{
+    ViewData["Title"] = "Register Trainee";
 }
+
+<h1>Register Trainee in Course</h1>
+
+<form asp-action="Create" method="post" style="max-width: 500px;">
+    <div class="mb-3">
+        <label>Trainee</label>
+        <select asp-for="TraneeId" class="form-control">
+            <option value="">-- Select Trainee --</option>
+            @foreach (var tranee in ViewBag.Tranees)
+            {
+                <option value="@tranee.Id">@tranee.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Course</label>
+        <select asp-for="CourseId" class="form-control">
+            <option value="">-- Select Course --</option>
+            @foreach (var course in ViewBag.Courses)
+            {
+                <option value="@course.Id">@course.Name</option>
+            }
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label>Grade</label>
+        <input asp-for="Grade" class="form-control" placeholder="e.g. A, B+, C" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>

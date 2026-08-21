@@ -9,6 +9,5 @@ namespace BLLayer.Interfaces
 {
     public interface ICourseBL:IBasicOperation<Course>
     {
-        void Add(Course c);
     }
 }

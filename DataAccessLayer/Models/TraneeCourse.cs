@@ -6,7 +6,14 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Models
 {
-    internal class TraneeCourse
+    public class TraneeCourse
     {
+        public int TraneeId { get; set; }
+        public Tranee Tranee { get; set; }
+
+        public int CourseId { get; set; }
+        public Course Course { get; set; }
+
+        public string Grade { get; set; }
     }
 }

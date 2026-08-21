@@ -7,7 +7,12 @@ namespace BLLayer.Services;
 
 public class InstructorBL : IInstructorBl
 {
-    private ITIDbContext _dbContext = new ITIDbContext();
+    private readonly ITIDbContext _dbContext;
+
+    public InstructorBL(ITIDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
 
     public List<Instructor> GetAll()
     {
@@ -28,11 +33,17 @@ public class InstructorBL : IInstructorBl
             .Where(i => i.DepartmentId == departmentId)
             .ToList();
     }
-    public void Add(Instructor instructor)
+
+    public void Add(Instructor entity)
     {
-        _dbContext.Instructors.Add(instructor);
+        _dbContext.Instructors.Add(entity);
+        _dbContext.SaveChanges();
+    }
+
+    public void Update(Instructor entity)
+    {
+        _dbContext.Instructors.Update(entity);
         _dbContext.SaveChanges();
     }
 }
-
 

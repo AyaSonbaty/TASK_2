@@ -1,21 +1,31 @@
 ﻿@model List<DataAccessLayer.Models.Course>
 
-<h1>All Courses</h1>
+@{
+    ViewData["Title"] = ViewBag.PageTitle;
+}
 
-<p>ViewData message: @ViewData["msg"]</p>
-<p>Courses count (ViewBag): @ViewBag.CoursesCount</p>
+<h1>@ViewBag.PageTitle</h1>
+<p>Total Courses: @ViewData["TotalCourses"]</p>
+<p>Your visits to this page: @ViewBag.VisitCount</p>
 
-<a href="/Course/Create">Add Course</a>
-<a href="/Course/ShowCookie">Show Cookie</a>
-<a href="/Course/ShowSession">Show Session</a>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
 
-<table border="1">
+<div class="mb-3">
+    <a asp-action="Create" class="btn btn-success">+ Add New Course</a>
+    <a asp-action="AssignInstructor" class="btn btn-primary">Assign Instructor</a>
+</div>
+
+<table class="table table-bordered">
     <thead>
         <tr>
             <th>Id</th>
             <th>Name</th>
-            <th>Min Degree</th>
+            <th>MinDegree</th>
             <th>Department</th>
+            <th>Instructor</th>
             <th></th>
         </tr>
     </thead>
@@ -27,7 +37,11 @@
                 <td>@course.Name</td>
                 <td>@course.MinDegree</td>
                 <td>@course.Department?.Name</td>
-                <td><a href="/Course/Details/@course.Id">Details</a></td>
+                <td>@course.Instructor?.Name</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@course.Id" class="btn btn-info btn-sm">Details</a>
+                    <a asp-action="Edit" asp-route-id="@course.Id" class="btn btn-warning btn-sm">Edit</a>
+                </td>
             </tr>
         }
     </tbody>

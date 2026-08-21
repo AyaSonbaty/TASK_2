@@ -1,10 +1,18 @@
-﻿@model DataAccessLayer.Models.Course
+﻿@model TASK_2.ViewModels.CourseDetailsViewModel
 
-<h1>Course Details</h1>
+@{
+    ViewData["Title"] = "Course Details";
+}
 
-<p>Id: @Model.Id</p>
-<p>Name: @Model.Name</p>
-<p>Min Degree: @Model.MinDegree</p>
-<p>Department: @Model.Department?.Name</p>
+<h1>@Model.Name</h1>
 
-<a href="/Course/Index">Back</a>
+<div class="card" style="max-width: 500px;">
+    <div class="card-body">
+        <p><strong>Id:</strong> @Model.Id</p>
+        <p><strong>Min Degree:</strong> @Model.MinDegree</p>
+        <p><strong>Department:</strong> @Model.DepartmentName</p>
+        <p><strong>Instructor:</strong> @(Model.InstructorName ?? "No instructor assigned yet")</p>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary btn-sm mt-3">&larr; Back</a>

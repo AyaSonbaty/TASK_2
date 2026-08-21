@@ -11,8 +11,6 @@ namespace BLLayer.Interfaces
 
     {
         List<Instructor> GetByDepartmentId(int departmentId);
-        void Add(Instructor instructor);
-
 
     }
 }

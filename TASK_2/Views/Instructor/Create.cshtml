@@ -1,9 +1,37 @@
-﻿<h1>Add Instructor</h1>
+﻿@model DataAccessLayer.Models.Instructor
 
-<form action="/Instructor/Save" method="post">
-    <input type="text" name="name" placeholder="Name" /><br />
-    <input type="text" name="address" placeholder="Address" /><br />
-    <input type="number" name="salary" placeholder="Salary" step="0.01" /><br />
-    <input type="number" name="departmentId" placeholder="Department Id" /><br />
-    <button type="submit">Save</button>
+@{
+    ViewData["Title"] = "Add Instructor";
+}
+
+<h1>Add New Instructor</h1>
+
+<form asp-action="Create" method="post" style="max-width: 500px;">
+    <div class="mb-3">
+        <label>Name</label>
+        <input asp-for="Name" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Address</label>
+        <input asp-for="Address" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Salary</label>
+        <input asp-for="Salary" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Department</label>
+        <select asp-for="DepartmentId" class="form-control">
+            <option value="">-- Select Department --</option>
+            @foreach (var dept in ViewBag.Departments)
+            {
+                <option value="@dept.Id">@dept.Name</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Save</button>
 </form>

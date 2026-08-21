@@ -1,74 +1,137 @@
-﻿using System;
+﻿using BLLayer.Interfaces;
 using BLLayer.Services;
 using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using TASK_2.ViewModels;
 
 namespace TASK_2.Controllers
 {
     public class CourseController : Controller
     {
-        CourseBL _courseBl = new CourseBL();
+        private readonly ICourseBl _courseBl;
+        private readonly IDepartmentBl _departmentBl;
+        private readonly IInstructorBl _instructorBl;
 
-        // GET:
+        public CourseController(ICourseBl courseBl, IDepartmentBl departmentBl, IInstructorBl instructorBl)
+        {
+            _courseBl = courseBl;
+            _departmentBl = departmentBl;
+            _instructorBl = instructorBl;
+        }
+
         public IActionResult Index()
         {
             var courses = _courseBl.GetAll();
-            string msg = "Courses loaded";
 
-            ViewData["msg"] = msg;
-            ViewBag.CoursesCount = courses.Count;
-            TempData["msg"] = msg;
+            ViewData["TotalCourses"] = courses.Count;
+            ViewBag.PageTitle = "All Courses";
 
-            HttpContext.Session.SetString("LastVisitedPage", "Course Index");
+            HttpContext.Session.SetString("LastVisitedPage", "CourseIndex");
 
-            var options = new CookieOptions()
+            int visitCount = 0;
+            if (Request.Cookies["CourseVisitCount"] != null)
             {
-                Expires = DateTime.Now.AddMinutes(1),
-                HttpOnly = false
-            };
-            HttpContext.Response.Cookies.Append("CourseViewMode", "table", options);
+                visitCount = int.Parse(Request.Cookies["CourseVisitCount"]);
+            }
+            visitCount++;
+            Response.Cookies.Append("CourseVisitCount", visitCount.ToString(),
+                new CookieOptions { Expires = DateTimeOffset.Now.AddDays(7) });
+
+            ViewBag.VisitCount = visitCount;
 
             return View(courses);
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null) return NotFound();
-
-            var course = _courseBl.GetById(id.Value);
-
+            var course = _courseBl.GetById(id);
             if (course == null) return NotFound();
 
-            return View(course);
+            var viewModel = new CourseDetailsViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                MinDegree = course.MinDegree,
+                DepartmentName = course.Department?.Name,
+                InstructorName = course.Instructor?.Name
+            };
+
+            return View(viewModel);
         }
 
         public IActionResult Create()
         {
+            ViewBag.Departments = _departmentBl.GetAll();
+            ViewBag.Instructors = _instructorBl.GetAll();
             return View();
         }
 
-        public IActionResult Save(string name, string minDegree, int departmentId)
+        [HttpPost]
+        public IActionResult Create(Course course)
         {
-            var course = new Course()
+            if (!ModelState.IsValid)
             {
-                Name = name,
-                MinDegree = minDegree,
-                DepartmentId = departmentId
-            };
-            _courseBl.Add(course);
+                ViewBag.Departments = _departmentBl.GetAll();
+                ViewBag.Instructors = _instructorBl.GetAll();
+                return View(course);
+            }
 
+            _courseBl.Add(course);
+            TempData["SuccessMessage"] = "Course added successfully";
             return RedirectToAction("Index");
         }
 
-        public IActionResult ShowCookie()
+        public IActionResult Edit(int id)
         {
-            return Content(HttpContext.Request.Cookies["CourseViewMode"]);
+            var course = _courseBl.GetById(id);
+            if (course == null) return NotFound();
+
+            ViewBag.Departments = _departmentBl.GetAll();
+            ViewBag.Instructors = _instructorBl.GetAll();
+            return View(course);
         }
 
-        public IActionResult ShowSession()
+        [HttpPost]
+        public IActionResult Edit(Course course)
         {
-            return Content(HttpContext.Session.GetString("LastVisitedPage"));
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Departments = _departmentBl.GetAll();
+                ViewBag.Instructors = _instructorBl.GetAll();
+                return View(course);
+            }
+
+            _courseBl.Update(course);
+            TempData["SuccessMessage"] = "Course updated successfully";
+            return RedirectToAction("Index");
+        }
+
+        public IActionResult AssignInstructor()
+        {
+            var viewModel = new AssignInstructorViewModel
+            {
+                Courses = _courseBl.GetAll(),
+                Instructors = _instructorBl.GetAll()
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult AssignInstructor(AssignInstructorViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                model.Courses = _courseBl.GetAll();
+                model.Instructors = _instructorBl.GetAll();
+                return View(model);
+            }
+
+            _courseBl.AssignInstructorToCourse(model.CourseId, model.InstructorId);
+
+            TempData["SuccessMessage"] = "Instructor assigned to course successfully";
+            return RedirectToAction("Index");
         }
     }
 }
-

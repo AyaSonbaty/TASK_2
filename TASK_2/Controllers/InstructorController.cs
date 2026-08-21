@@ -1,34 +1,20 @@
-﻿using System;
+﻿using BLLayer.Interfaces;
 using BLLayer.Services;
 using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using System;
 
 namespace TASK_2.Controllers
 {
     public class InstructorController : Controller
     {
-        InstructorBL _instructorBl = new InstructorBL();
+        private readonly IInstructorBl _instructorBl;
+        private readonly IDepartmentBl _departmentBl;
 
-        // GET:
-        public IActionResult Index()
+        public InstructorController(IInstructorBl instructorBl, IDepartmentBl departmentBl)
         {
-            var instructors = _instructorBl.GetAll();
-            string msg = "Instructors loaded";
-
-            ViewData["msg"] = msg;
-            ViewBag.InstructorsCount = instructors.Count;
-            TempData["msg"] = msg;
-
-            HttpContext.Session.SetString("LastVisitedPage", "Instructor Index");
-
-            var options = new CookieOptions()
-            {
-                Expires = DateTime.Now.AddMinutes(1),
-                HttpOnly = false
-            };
-            HttpContext.Response.Cookies.Append("InstructorViewMode", "table", options);
-
-            return View(instructors);
+            _instructorBl = instructorBl;
+            _departmentBl = departmentBl;
         }
 
         public IActionResult ByDepartment(int id)
@@ -37,44 +23,54 @@ namespace TASK_2.Controllers
             return View(instructors);
         }
 
-        public IActionResult Details(int? id)
+        public IActionResult Details(int id)
         {
-            if (id == null) return NotFound();
-
-            var instructor = _instructorBl.GetById(id.Value);
-
+            var instructor = _instructorBl.GetById(id);
             if (instructor == null) return NotFound();
-
             return View(instructor);
         }
 
         public IActionResult Create()
         {
+            ViewBag.Departments = _departmentBl.GetAll();
             return View();
         }
 
-        public IActionResult Save(string name, string address, decimal salary, int departmentId)
+        [HttpPost]
+        public IActionResult Create(Instructor instructor)
         {
-            var instructor = new Instructor()
+            if (!ModelState.IsValid)
             {
-                Name = name,
-                Address = address,
-                Salary = salary,
-                DepartmentId = departmentId
-            };
+                ViewBag.Departments = _departmentBl.GetAll();
+                return View(instructor);
+            }
+
             _instructorBl.Add(instructor);
-
-            return RedirectToAction("Index");
+            TempData["SuccessMessage"] = "Instructor added successfully";
+            return RedirectToAction("ByDepartment", new { id = instructor.DepartmentId });
         }
 
-        public IActionResult ShowCookie()
+        public IActionResult Edit(int id)
         {
-            return Content(HttpContext.Request.Cookies["InstructorViewMode"]);
+            var instructor = _instructorBl.GetById(id);
+            if (instructor == null) return NotFound();
+
+            ViewBag.Departments = _departmentBl.GetAll();
+            return View(instructor);
         }
 
-        public IActionResult ShowSession()
+        [HttpPost]
+        public IActionResult Edit(Instructor instructor)
         {
-            return Content(HttpContext.Session.GetString("LastVisitedPage"));
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Departments = _departmentBl.GetAll();
+                return View(instructor);
+            }
+
+            _instructorBl.Update(instructor);
+            TempData["SuccessMessage"] = "Instructor updated successfully";
+            return RedirectToAction("ByDepartment", new { id = instructor.DepartmentId });
         }
     }
 }
