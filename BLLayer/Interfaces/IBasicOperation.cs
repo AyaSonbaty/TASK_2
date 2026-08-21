@@ -10,6 +10,9 @@ namespace BLLayer.Interfaces
     {
         List<T> GetAll();
         T GetById(int id);
+        void Add(T entity);
+        void Update(T entity);
+
     }
 }
 

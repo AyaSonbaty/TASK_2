@@ -6,7 +6,12 @@ namespace BLLayer.Services;
 
 public class DepartmentBL : IDepartmentBl
 {
-    private ITIDbContext _dbContext = new ITIDbContext();
+    private readonly ITIDbContext _dbContext;
+
+    public DepartmentBL(ITIDbContext dbContext)
+    {
+        _dbContext = dbContext;
+    }
 
     public List<Department> GetAll()
     {
@@ -17,5 +22,16 @@ public class DepartmentBL : IDepartmentBl
     {
         return _dbContext.Departments.Find(id);
     }
-}
 
+    public void Add(Department entity)
+    {
+        _dbContext.Departments.Add(entity);
+        _dbContext.SaveChanges();
+    }
+
+    public void Update(Department entity)
+    {
+        _dbContext.Departments.Update(entity);
+        _dbContext.SaveChanges();
+    }
+}
