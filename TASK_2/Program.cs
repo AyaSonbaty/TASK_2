@@ -12,7 +12,7 @@ builder.Services.AddDbContext<ITIDbContext>(options =>
 
 builder.Services.AddScoped<IDepartmentBl, DepartmentBL>();
 builder.Services.AddScoped<IInstructorBl, InstructorBL>();
-builder.Services.AddScoped<ICourseBl, CourseBL>();
+builder.Services.AddScoped<ICourseBL, CourseBL>();
 builder.Services.AddScoped<ITraneeBl, TraneeBL>();
 builder.Services.AddScoped<ITraneeCourseBl, TraneeCourseBL>();
 

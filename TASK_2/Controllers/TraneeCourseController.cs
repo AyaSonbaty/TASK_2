@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace TASK_2.Controllers
 {
-    public class TraneeCourse : Controller
+    public class TraneeCourseController : Controller
     {
         private readonly ITraneeCourseBl _traneeCourseBl;
         private readonly ITraneeBl _traneeBl;
-        private readonly ICourseBl _courseBl;
+        private readonly ICourseBL _courseBl;
 
-        public TraneeCourseController(ITraneeCourseBl traneeCourseBl, ITraneeBl traneeBl, ICourseBl courseBl)
+        public TraneeCourseController(ITraneeCourseBl traneeCourseBl, ITraneeBl traneeBl, ICourseBL courseBl)
         {
             _traneeCourseBl = traneeCourseBl;
             _traneeBl = traneeBl;
@@ -30,7 +30,7 @@ namespace TASK_2.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(TraneeCourse traneeCourse)
+        public IActionResult Create(TraneeCourseController traneeCourse)
         {
             if (!ModelState.IsValid)
             {
@@ -55,7 +55,7 @@ namespace TASK_2.Controllers
         }
 
         [HttpPost]
-        public IActionResult Edit(TraneeCourse traneeCourse)
+        public IActionResult Edit(TraneeCourseController traneeCourse)
         {
             if (!ModelState.IsValid)
             {

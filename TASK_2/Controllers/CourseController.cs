@@ -9,11 +9,11 @@ namespace TASK_2.Controllers
 {
     public class CourseController : Controller
     {
-        private readonly ICourseBl _courseBl;
+        private readonly ICourseBL _courseBl;
         private readonly IDepartmentBl _departmentBl;
         private readonly IInstructorBl _instructorBl;
 
-        public CourseController(ICourseBl courseBl, IDepartmentBl departmentBl, IInstructorBl instructorBl)
+        public CourseController(ICourseBL courseBl, IDepartmentBl departmentBl, IInstructorBl instructorBl)
         {
             _courseBl = courseBl;
             _departmentBl = departmentBl;
@@ -107,31 +107,6 @@ namespace TASK_2.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult AssignInstructor()
-        {
-            var viewModel = new AssignInstructorViewModel
-            {
-                Courses = _courseBl.GetAll(),
-                Instructors = _instructorBl.GetAll()
-            };
-
-            return View(viewModel);
-        }
-
-        [HttpPost]
-        public IActionResult AssignInstructor(AssignInstructorViewModel model)
-        {
-            if (!ModelState.IsValid)
-            {
-                model.Courses = _courseBl.GetAll();
-                model.Instructors = _instructorBl.GetAll();
-                return View(model);
-            }
-
-            _courseBl.AssignInstructorToCourse(model.CourseId, model.InstructorId);
-
-            TempData["SuccessMessage"] = "Instructor assigned to course successfully";
-            return RedirectToAction("Index");
-        }
+        
     }
 }

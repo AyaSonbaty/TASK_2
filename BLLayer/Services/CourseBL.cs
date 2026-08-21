@@ -11,7 +11,7 @@ using DataAccessLayer.Models;
 
 namespace BLLayer.Services
 {
-    public class CourseBL : ICourseBl
+    public class CourseBL : ICourseBL
     {
         private readonly ITIDbContext _dbContext;
 
@@ -29,7 +29,7 @@ namespace BLLayer.Services
         {
             return _dbContext.Courses
                 .Include(c => c.Department)
-                .Include(c => c.Instructors)
+                .Include(c => c.Instructor)
                 .FirstOrDefault(c => c.Id == id);
         }
 
