@@ -11,11 +11,11 @@ namespace DataAccessLayer.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string ManagerName { get; set; }
-
+        //has one
         public int? ManagerId { get; set; }
         public Instructor Manager { get; set; }
         public DateTime? HireDate { get; set; }
-
+        //has many
         public ICollection<Instructor> Instructors { get; set; } = new List<Instructor>();
 
         public ICollection<Course> Courses { get; set; } = new List<Course>();

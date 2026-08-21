@@ -28,6 +28,11 @@ public class InstructorBL : IInstructorBl
             .Where(i => i.DepartmentId == departmentId)
             .ToList();
     }
+    public void Add(Instructor instructor)
+    {
+        _dbContext.Instructors.Add(instructor);
+        _dbContext.SaveChanges();
+    }
 }
 
 

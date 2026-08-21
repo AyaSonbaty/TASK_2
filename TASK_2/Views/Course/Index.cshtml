@@ -1,0 +1,34 @@
+﻿@model List<DataAccessLayer.Models.Course>
+
+<h1>All Courses</h1>
+
+<p>ViewData message: @ViewData["msg"]</p>
+<p>Courses count (ViewBag): @ViewBag.CoursesCount</p>
+
+<a href="/Course/Create">Add Course</a>
+<a href="/Course/ShowCookie">Show Cookie</a>
+<a href="/Course/ShowSession">Show Session</a>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Min Degree</th>
+            <th>Department</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var course in Model)
+        {
+            <tr>
+                <td>@course.Id</td>
+                <td>@course.Name</td>
+                <td>@course.MinDegree</td>
+                <td>@course.Department?.Name</td>
+                <td><a href="/Course/Details/@course.Id">Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

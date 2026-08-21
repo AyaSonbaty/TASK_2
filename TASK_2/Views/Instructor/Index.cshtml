@@ -1,0 +1,36 @@
+﻿@model List<DataAccessLayer.Models.Instructor>
+
+<h1>All Instructors</h1>
+
+<p>ViewData message: @ViewData["msg"]</p>
+<p>Instructors count (ViewBag): @ViewBag.InstructorsCount</p>
+
+<a href="/Instructor/Create">Add Instructor</a>
+<a href="/Instructor/ShowCookie">Show Cookie</a>
+<a href="/Instructor/ShowSession">Show Session</a>
+
+<table border="1">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Name</th>
+            <th>Address</th>
+            <th>Salary</th>
+            <th>Department</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var instructor in Model)
+        {
+            <tr>
+                <td>@instructor.Id</td>
+                <td>@instructor.Name</td>
+                <td>@instructor.Address</td>
+                <td>@instructor.Salary</td>
+                <td>@instructor.Department?.Name</td>
+                <td><a href="/Instructor/Details/@instructor.Id">Details</a></td>
+            </tr>
+        }
+    </tbody>
+</table>

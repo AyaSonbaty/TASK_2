@@ -7,13 +7,8 @@ using System.Threading.Tasks;
 
 namespace BLLayer.Interfaces
 {
-    public interface IInstructorBl: IBasicOperation<Instructor>
-
+    public interface ICourseBL:IBasicOperation<Course>
     {
-        List<Instructor> GetByDepartmentId(int departmentId);
-        void Add(Instructor instructor);
-
-
+        void Add(Course c);
     }
 }
-

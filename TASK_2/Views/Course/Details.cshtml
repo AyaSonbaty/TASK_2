@@ -1,0 +1,10 @@
+﻿@model DataAccessLayer.Models.Course
+
+<h1>Course Details</h1>
+
+<p>Id: @Model.Id</p>
+<p>Name: @Model.Name</p>
+<p>Min Degree: @Model.MinDegree</p>
+<p>Department: @Model.Department?.Name</p>
+
+<a href="/Course/Index">Back</a>
