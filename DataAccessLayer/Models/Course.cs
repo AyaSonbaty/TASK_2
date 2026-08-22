@@ -16,7 +16,7 @@ namespace DataAccessLayer.Models
         public Department Department { get; set; }
         public int? InstructorId { get; set; }
         public Instructor Instructor { get; set; }
-        public ICollection<TraneeCourse> TraneeCourses { get; set; } = new List<TraneeCourse>();;
+        public ICollection<TraneeCourse> TraneeCourses { get; set; } = new List<TraneeCourse>();
 
     }
 }
