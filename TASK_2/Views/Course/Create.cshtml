@@ -7,6 +7,7 @@
 <h1>Add New Course</h1>
 
 <form asp-action="Create" method="post" style="max-width: 500px;">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
     <div class="mb-3">
         <label>Course Name</label>
         <input asp-for="Name" class="form-control" />

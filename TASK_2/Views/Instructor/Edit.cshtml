@@ -7,6 +7,8 @@
 <h1>Edit Instructor</h1>
 
 <form asp-action="Edit" method="post" style="max-width: 500px;">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
     <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">

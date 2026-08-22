@@ -7,7 +7,11 @@
 <h1>Edit Department</h1>
 
 <form asp-action="Edit" method="post" style="max-width: 500px;">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
     <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ManagerId" />
+    <input type="hidden" asp-for="HireDate" />
 
     <div class="mb-3">
         <label>Department Name</label>
@@ -20,6 +24,7 @@
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
+    
 </form>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

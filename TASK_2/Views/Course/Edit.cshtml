@@ -7,6 +7,8 @@
 <h1>Edit Course</h1>
 
 <form asp-action="Edit" method="post" style="max-width: 500px;">
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+
     <input type="hidden" asp-for="Id" />
 
     <div class="mb-3">
@@ -22,6 +24,8 @@
     <div class="mb-3">
         <label>Department</label>
         <select asp-for="DepartmentId" class="form-control">
+                <option value="">-- Select Instructor --</option>   
+
             @foreach (var dept in ViewBag.Departments)
             {
                 <option value="@dept.Id">@dept.Name</option>

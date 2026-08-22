@@ -22,7 +22,10 @@ namespace BLLayer.Services
 
         public List<Course> GetAll()
         {
-            return _dbContext.Courses.Include(c => c.Department).ToList();
+            return _dbContext.Courses
+                .Include(c => c.Department)
+                .Include(c => c.Instructor)
+                .ToList();
         }
 
         public Course GetById(int id)
