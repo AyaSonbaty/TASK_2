@@ -6,7 +6,7 @@
 <h1>Edit Department</h1>
 
 <form asp-action="Edit" method="post" style="max-width: 500px;">
-        <div asp-validation-summary="All" class="text-danger mb-3"></div>
+    <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
     <input type="hidden" asp-for="Id" />
 
@@ -17,20 +17,24 @@
     </div>
 
     <div class="mb-3">
-        <label>Manager (must be an existing instructor)</label>
+        <label>Manager (must be an instructor in this department)</label>
         <select asp-for="ManagerId" class="form-control">
             <option value="">-- No Manager --</option>
-            @foreach (var instructor in (List<DataAccessLayer.Models.Instructor>)ViewBag.Instructors)
+            @if (ViewBag.Instructors != null)
             {
-                <option value="@instructor.Id">@instructor.Name</option>
+                @foreach (var instructor in (List<DataAccessLayer.Models.Instructor>)ViewBag.Instructors)
+                {
+                    <option value="@instructor.Id">@instructor.Name</option>
+                }
             }
         </select>
         <span asp-validation-for="ManagerId" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>
-    
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
 </form>
+
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

@@ -52,17 +52,27 @@ namespace TASK_2.Controllers
             var department = _departmentBl.GetById(id);
             if (department == null) return NotFound();
 
+            // Manager must belong to this department
             ViewBag.Instructors = _departmentBl.GetInstructorsInDepartment(id);
-            return View(department); // أو الـ ViewModel لو استخدمته
+
+            var vm = new DepartmentViewModel
+            {
+                Id = department.Id,
+                Name = department.Name,
+                ManagerName = department.ManagerName,
+                ManagerId = department.ManagerId
+            };
+
+            return View(vm);   // ← لازم ViewModel مش Entity
         }
 
         [HttpPost]
-        public IActionResult Edit(Department department) // أو ViewModel
+        public IActionResult Edit(DepartmentViewModel vm)
         {
-            if (department.ManagerId.HasValue)
+            if (vm.ManagerId.HasValue)
             {
-                var instructors = _departmentBl.GetInstructorsInDepartment(department.Id);
-                if (!instructors.Any(i => i.Id == department.ManagerId.Value))
+                var instructors = _departmentBl.GetInstructorsInDepartment(vm.Id);
+                if (!instructors.Any(i => i.Id == vm.ManagerId.Value))
                 {
                     ModelState.AddModelError("ManagerId", "Manager must be an instructor in this department");
                 }
@@ -70,9 +80,15 @@ namespace TASK_2.Controllers
 
             if (!ModelState.IsValid)
             {
-                ViewBag.Instructors = _departmentBl.GetInstructorsInDepartment(department.Id);
-                return View(department);
+                ViewBag.Instructors = _departmentBl.GetInstructorsInDepartment(vm.Id);
+                return View(vm);
             }
+
+            var department = _departmentBl.GetById(vm.Id);
+            if (department == null) return NotFound();
+
+            department.Name = vm.Name;
+            department.ManagerId = vm.ManagerId;
 
             _departmentBl.Update(department);
             TempData["SuccessMessage"] = "Department updated successfully";
