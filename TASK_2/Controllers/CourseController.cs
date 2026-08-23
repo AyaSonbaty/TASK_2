@@ -70,10 +70,22 @@ namespace TASK_2.Controllers
         [HttpPost]
         public IActionResult Create(Course course)
         {
+            // التحقق المنطقي
+            if (course.InstructorId.HasValue)
+            {
+                var instructor = _instructorBl.GetById(course.InstructorId.Value);
+                if (instructor == null || instructor.DepartmentId != course.DepartmentId)
+                {
+                    ModelState.AddModelError("InstructorId", "The instructor must belong to the selected department");
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Departments = _departmentBl.GetAll();
-                ViewBag.Instructors = _instructorBl.GetAll();
+                ViewBag.Instructors = course.DepartmentId > 0
+                    ? _instructorBl.GetByDepartmentId(course.DepartmentId)
+                    : _instructorBl.GetAll();
                 return View(course);
             }
 
@@ -88,17 +100,26 @@ namespace TASK_2.Controllers
             if (course == null) return NotFound();
 
             ViewBag.Departments = _departmentBl.GetAll();
-            ViewBag.Instructors = _instructorBl.GetAll();
+            ViewBag.Instructors = _instructorBl.GetByDepartmentId(course.DepartmentId);
             return View(course);
         }
 
         [HttpPost]
         public IActionResult Edit(Course course)
         {
+            if (course.InstructorId.HasValue)
+            {
+                var instructor = _instructorBl.GetById(course.InstructorId.Value);
+                if (instructor == null || instructor.DepartmentId != course.DepartmentId)
+                {
+                    ModelState.AddModelError("InstructorId", "The instructor must belong to the selected department");
+                }
+            }
+
             if (!ModelState.IsValid)
             {
                 ViewBag.Departments = _departmentBl.GetAll();
-                ViewBag.Instructors = _instructorBl.GetAll();
+                ViewBag.Instructors = _instructorBl.GetByDepartmentId(course.DepartmentId);
                 return View(course);
             }
 

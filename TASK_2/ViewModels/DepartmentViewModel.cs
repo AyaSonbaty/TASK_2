@@ -10,7 +10,8 @@ namespace TASK_2.ViewModels
         [Required(ErrorMessage = "the department name is required")]
         public string Name { get; set; }
 
-
+        [Required(ErrorMessage = "Manager name is required")]
+        public string ManagerName { get; set; }
 
         [CheckManagerBelongsToDepartment(ErrorMessage = "you have to enter the right manager")]
         public int? ManagerId { get; set; }

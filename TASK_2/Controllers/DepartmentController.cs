@@ -52,32 +52,27 @@ namespace TASK_2.Controllers
             var department = _departmentBl.GetById(id);
             if (department == null) return NotFound();
 
-            var vm = new DepartmentViewModel
-            {
-                Id = department.Id,
-                Name = department.Name,
-                ManagerId = department.ManagerId
-            };
-
-            ViewBag.Instructors = _departmentBl.GetNotManager(department.Id);
-
-            return View(vm);
+            ViewBag.Instructors = _departmentBl.GetInstructorsInDepartment(id);
+            return View(department); // أو الـ ViewModel لو استخدمته
         }
 
         [HttpPost]
-        public IActionResult Edit(DepartmentViewModel vm)
+        public IActionResult Edit(Department department) // أو ViewModel
         {
-            if (!ModelState.IsValid)
+            if (department.ManagerId.HasValue)
             {
-                ViewBag.Instructors = _departmentBl.GetNotManager(vm.Id);
-                return View(vm);
+                var instructors = _departmentBl.GetInstructorsInDepartment(department.Id);
+                if (!instructors.Any(i => i.Id == department.ManagerId.Value))
+                {
+                    ModelState.AddModelError("ManagerId", "Manager must be an instructor in this department");
+                }
             }
 
-            var department = _departmentBl.GetById(vm.Id);
-            if (department == null) return NotFound();
-
-            department.Name = vm.Name;
-            department.ManagerId = vm.ManagerId;
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Instructors = _departmentBl.GetInstructorsInDepartment(department.Id);
+                return View(department);
+            }
 
             _departmentBl.Update(department);
             TempData["SuccessMessage"] = "Department updated successfully";
@@ -111,3 +106,4 @@ namespace TASK_2.Controllers
         }
     }
 }
+
