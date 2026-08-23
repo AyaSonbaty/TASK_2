@@ -11,3 +11,4 @@ public class CourseCreateViewModel
     [CheckInstructorBelongsToDepartment]
     public int? InstructorId { get; set; }
 }
+

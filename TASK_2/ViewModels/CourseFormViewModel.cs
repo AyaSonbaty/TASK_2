@@ -20,3 +20,4 @@ public class CourseFormViewModel
     [CheckInstructorBelongsToDepartment]
     public int? InstructorId { get; set; }
 }
+
