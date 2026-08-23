@@ -1,13 +1,9 @@
 ﻿using BLLayer.Interfaces;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
+using TASK_2.ViewModels;
 
-namespace BLLayer.Validations
+namespace TASK_2.Validations
 {
     public class CheckManagerBelongsToDepartment : ValidationAttribute
     {
@@ -20,7 +16,10 @@ namespace BLLayer.Validations
             if (departmentBl == null)
                 return new ValidationResult("Validation service not available");
 
-            var availableManagers = departmentBl.GetNotManager()
+            var vm = validationContext.ObjectInstance as DepartmentViewModel;
+            int? currentDepartmentId = (vm != null && vm.Id != 0) ? vm.Id : (int?)null;
+
+            var availableManagers = departmentBl.GetNotManager(currentDepartmentId)
                 .Select(x => x.Id)
                 .ToList();
 

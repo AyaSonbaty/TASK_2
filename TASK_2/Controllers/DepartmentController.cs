@@ -23,16 +23,24 @@ namespace TASK_2.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            ViewBag.Instructors = _departmentBl.GetNotManager();
+            return View(new DepartmentViewModel());
         }
 
         [HttpPost]
-        public IActionResult Create(Department department)
+        public IActionResult Create(DepartmentViewModel vm)
         {
             if (!ModelState.IsValid)
             {
-                return View(department);
+                ViewBag.Instructors = _departmentBl.GetNotManager();
+                return View(vm);
             }
+
+            var department = new Department
+            {
+                Name = vm.Name,
+                ManagerId = vm.ManagerId
+            };
 
             _departmentBl.Add(department);
             TempData["SuccessMessage"] = "Department added successfully";
@@ -44,25 +52,24 @@ namespace TASK_2.Controllers
             var department = _departmentBl.GetById(id);
             if (department == null) return NotFound();
 
-            var vm = new DepartmentEditViewModel
+            var vm = new DepartmentViewModel
             {
                 Id = department.Id,
                 Name = department.Name,
-                ManagerName = department.ManagerName,
                 ManagerId = department.ManagerId
             };
 
-            ViewBag.Instructors = _departmentBl.GetNotManager();
+            ViewBag.Instructors = _departmentBl.GetNotManager(department.Id);
 
             return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Edit(DepartmentEditViewModel vm)
+        public IActionResult Edit(DepartmentViewModel vm)
         {
             if (!ModelState.IsValid)
             {
-                ViewBag.Instructors = _departmentBl.GetNotManager();
+                ViewBag.Instructors = _departmentBl.GetNotManager(vm.Id);
                 return View(vm);
             }
 
@@ -70,7 +77,6 @@ namespace TASK_2.Controllers
             if (department == null) return NotFound();
 
             department.Name = vm.Name;
-            department.ManagerName = vm.ManagerName;
             department.ManagerId = vm.ManagerId;
 
             _departmentBl.Update(department);
@@ -105,5 +111,3 @@ namespace TASK_2.Controllers
         }
     }
 }
-
-

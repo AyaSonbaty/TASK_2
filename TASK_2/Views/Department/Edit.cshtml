@@ -1,4 +1,4 @@
-﻿@model TASK_2.ViewModels.DepartmentEditViewModel
+﻿@model TASK_2.ViewModels.DepartmentViewModel
 @{
     ViewData["Title"] = "Edit Department";
 }
@@ -17,13 +17,7 @@
     </div>
 
     <div class="mb-3">
-        <label>Manager Name</label>
-        <input asp-for="ManagerName" class="form-control" />
-        <span asp-validation-for="ManagerName" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label>Manager (must be an instructor already in this department)</label>
+        <label>Manager (must be an existing instructor)</label>
         <select asp-for="ManagerId" class="form-control">
             <option value="">-- No Manager --</option>
             @foreach (var instructor in (List<DataAccessLayer.Models.Instructor>)ViewBag.Instructors)

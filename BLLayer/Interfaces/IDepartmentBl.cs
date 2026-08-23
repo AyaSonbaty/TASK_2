@@ -12,6 +12,7 @@ namespace BLLayer.Interfaces
     {
         bool HasInstructorsOrCourses(int departmentId);
         List<Instructor> GetInstructorsInDepartment(int departmentId);
-        List<Instructor> GetNotManager();
+        List<Instructor> GetNotManager(int? excludeDepartmentId = null);
     }
 }
+

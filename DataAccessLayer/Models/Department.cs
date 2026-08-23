@@ -12,8 +12,8 @@ namespace DataAccessLayer.Models
         public int Id { get; set; }
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string ManagerName { get; set; }
+      
+        public string? ManagerName { get; set; }
 
         public int? ManagerId { get; set; }
         public Instructor? Manager { get; set; }

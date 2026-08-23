@@ -1,4 +1,4 @@
-﻿@model DataAccessLayer.Models.Department
+﻿@model TASK_2.ViewModels.DepartmentViewModel
 
 @{
     ViewData["Title"] = "Add Department";
@@ -16,9 +16,15 @@
     </div>
 
     <div class="mb-3">
-        <label>Manager Name</label>
-        <input asp-for="ManagerName" class="form-control" />
-        <span asp-validation-for="ManagerName" class="text-danger"></span>
+        <label>Manager (must be an existing instructor)</label>
+        <select asp-for="ManagerId" class="form-control">
+            <option value="">-- No Manager --</option>
+            @foreach (var instructor in (List<DataAccessLayer.Models.Instructor>)ViewBag.Instructors)
+            {
+                <option value="@instructor.Id">@instructor.Name</option>
+            }
+        </select>
+        <span asp-validation-for="ManagerId" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Save</button>

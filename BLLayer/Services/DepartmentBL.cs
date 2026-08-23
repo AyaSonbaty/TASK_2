@@ -25,15 +25,29 @@ public class DepartmentBL : IDepartmentBl
 
     public void Add(Department entity)
     {
+        SyncManagerName(entity);
         _dbContext.Departments.Add(entity);
         _dbContext.SaveChanges();
     }
 
     public void Update(Department entity)
     {
+        SyncManagerName(entity);
         _dbContext.Departments.Update(entity);
         _dbContext.SaveChanges();
     }
+
+    // Keeps ManagerName always set to a real string (never null), matching
+    // the column's NOT NULL constraint in the database as-is, with no
+    // migration needed. Uses the chosen Instructor's name when a manager
+    // is picked, or "No Manager" otherwise.
+    private void SyncManagerName(Department entity)
+    {
+        entity.ManagerName = entity.ManagerId.HasValue
+            ? (_dbContext.Instructors.Find(entity.ManagerId.Value)?.Name ?? "No Manager")
+            : "No Manager";
+    }
+
     public bool HasInstructorsOrCourses(int departmentId)
     {
         return _dbContext.Instructors.Any(i => i.DepartmentId == departmentId)
@@ -54,10 +68,11 @@ public class DepartmentBL : IDepartmentBl
             _dbContext.SaveChanges();
         }
     }
-    public List<Instructor> GetNotManager()
+
+    public List<Instructor> GetNotManager(int? excludeDepartmentId = null)
     {
         var assignedManagers = _dbContext.Departments
-            .Where(d => d.ManagerId != null)
+            .Where(d => d.ManagerId != null && d.Id != excludeDepartmentId)
             .Select(d => d.ManagerId.Value)
             .ToList();
 
@@ -65,5 +80,4 @@ public class DepartmentBL : IDepartmentBl
             .Where(i => !assignedManagers.Contains(i.Id))
             .ToList();
     }
-
 }
