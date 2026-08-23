@@ -54,4 +54,16 @@ public class DepartmentBL : IDepartmentBl
             _dbContext.SaveChanges();
         }
     }
+    public List<Instructor> GetNotManager()
+    {
+        var assignedManagers = _dbContext.Departments
+            .Where(d => d.ManagerId != null)
+            .Select(d => d.ManagerId.Value)
+            .ToList();
+
+        return _dbContext.Instructors
+            .Where(i => !assignedManagers.Contains(i.Id))
+            .ToList();
     }
+
+}

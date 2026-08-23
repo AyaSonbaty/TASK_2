@@ -6,8 +6,7 @@ using TASK_2.ViewModels;
 
 namespace TASK_2.Controllers
 {
-    public class AccountController : Controller
-    {
+
         public class AccountController : Controller
         {
             private readonly UserManager<AppUser> _userManager;
@@ -90,4 +89,3 @@ namespace TASK_2.Controllers
             }
         } 
     }
-}

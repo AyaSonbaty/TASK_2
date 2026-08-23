@@ -1,5 +1,4 @@
-﻿@model DataAccessLayer.Models.Department
-
+﻿@model TASK_2.ViewModels.DepartmentEditViewModel
 @{
     ViewData["Title"] = "Edit Department";
 }
@@ -10,7 +9,6 @@
         <div asp-validation-summary="All" class="text-danger mb-3"></div>
 
     <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="HireDate" />
 
     <div class="mb-3">
         <label>Department Name</label>

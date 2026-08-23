@@ -2,6 +2,7 @@
 using BLLayer.Services;
 using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using TASK_2.ViewModels;
 
 namespace TASK_2.Controllers
 {
@@ -42,16 +43,35 @@ namespace TASK_2.Controllers
         {
             var department = _departmentBl.GetById(id);
             if (department == null) return NotFound();
-            return View(department);
+
+            var vm = new DepartmentEditViewModel
+            {
+                Id = department.Id,
+                Name = department.Name,
+                ManagerName = department.ManagerName,
+                ManagerId = department.ManagerId
+            };
+
+            ViewBag.Instructors = _departmentBl.GetNotManager();
+
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Edit(Department department)
+        public IActionResult Edit(DepartmentEditViewModel vm)
         {
             if (!ModelState.IsValid)
             {
-                return View(department);
+                ViewBag.Instructors = _departmentBl.GetNotManager();
+                return View(vm);
             }
+
+            var department = _departmentBl.GetById(vm.Id);
+            if (department == null) return NotFound();
+
+            department.Name = vm.Name;
+            department.ManagerName = vm.ManagerName;
+            department.ManagerId = vm.ManagerId;
 
             _departmentBl.Update(department);
             TempData["SuccessMessage"] = "Department updated successfully";

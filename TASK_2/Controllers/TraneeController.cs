@@ -89,5 +89,5 @@ namespace TASK_2.Controllers
             TempData["SuccessMessage"] = "Trainee deleted successfully";
             return RedirectToAction("Index");
         }
-        }
+    }
 }
