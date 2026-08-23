@@ -1,6 +1,7 @@
 ﻿using BLLayer.Interfaces;
 using DataAccessLayer.Data;
 using DataAccessLayer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BLLayer.Services;
 
@@ -15,37 +16,26 @@ public class DepartmentBL : IDepartmentBl
 
     public List<Department> GetAll()
     {
-        return _dbContext.Departments.ToList();
+        return _dbContext.Departments.Include(d => d.Manager).ToList();
     }
 
     public Department GetById(int id)
     {
-        return _dbContext.Departments.Find(id);
+        return _dbContext.Departments
+            .Include(d => d.Manager)
+            .FirstOrDefault(d => d.Id == id);
     }
 
     public void Add(Department entity)
     {
-        SyncManagerName(entity);
         _dbContext.Departments.Add(entity);
         _dbContext.SaveChanges();
     }
 
     public void Update(Department entity)
     {
-        SyncManagerName(entity);
         _dbContext.Departments.Update(entity);
         _dbContext.SaveChanges();
-    }
-
-    // Keeps ManagerName always set to a real string (never null), matching
-    // the column's NOT NULL constraint in the database as-is, with no
-    // migration needed. Uses the chosen Instructor's name when a manager
-    // is picked, or "No Manager" otherwise.
-    private void SyncManagerName(Department entity)
-    {
-        entity.ManagerName = entity.ManagerId.HasValue
-            ? (_dbContext.Instructors.Find(entity.ManagerId.Value)?.Name ?? "No Manager")
-            : "No Manager";
     }
 
     public bool HasInstructorsOrCourses(int departmentId)
@@ -81,3 +71,6 @@ public class DepartmentBL : IDepartmentBl
             .ToList();
     }
 }
+
+
+

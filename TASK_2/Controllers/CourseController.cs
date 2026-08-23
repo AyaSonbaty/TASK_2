@@ -2,6 +2,7 @@
 using BLLayer.Services;
 using DataAccessLayer.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using TASK_2.ViewModels;
 
@@ -62,32 +63,28 @@ namespace TASK_2.Controllers
 
         public IActionResult Create()
         {
-            ViewBag.Departments = _departmentBl.GetAll();
-            ViewBag.Instructors = _instructorBl.GetAll();
-            return View();
+            ViewBag.Departments = new SelectList(_departmentBl.GetAll(), "Id", "Name");
+            ViewBag.Instructors = new SelectList(_instructorBl.GetAll(), "Id", "Name");
+            return View(new CourseCreateViewModel());
         }
 
         [HttpPost]
-        public IActionResult Create(Course course)
+        public IActionResult Create(CourseCreateViewModel vm)
         {
-            // التحقق المنطقي
-            if (course.InstructorId.HasValue)
-            {
-                var instructor = _instructorBl.GetById(course.InstructorId.Value);
-                if (instructor == null || instructor.DepartmentId != course.DepartmentId)
-                {
-                    ModelState.AddModelError("InstructorId", "The instructor must belong to the selected department");
-                }
-            }
-
             if (!ModelState.IsValid)
             {
-                ViewBag.Departments = _departmentBl.GetAll();
-                ViewBag.Instructors = course.DepartmentId > 0
-                    ? _instructorBl.GetByDepartmentId(course.DepartmentId)
-                    : _instructorBl.GetAll();
-                return View(course);
+                ViewBag.Departments = new SelectList(_departmentBl.GetAll(), "Id", "Name", vm.DepartmentId);
+                ViewBag.Instructors = new SelectList(_instructorBl.GetAll(), "Id", "Name", vm.InstructorId);
+                return View(vm);
             }
+
+            var course = new Course
+            {
+                Name = vm.Name,
+                MinDegree = vm.MinDegree,
+                DepartmentId = vm.DepartmentId,
+                InstructorId = vm.InstructorId
+            };
 
             _courseBl.Add(course);
             TempData["SuccessMessage"] = "Course added successfully";
@@ -99,35 +96,42 @@ namespace TASK_2.Controllers
             var course = _courseBl.GetById(id);
             if (course == null) return NotFound();
 
-            ViewBag.Departments = _departmentBl.GetAll();
-            ViewBag.Instructors = _instructorBl.GetByDepartmentId(course.DepartmentId);
-            return View(course);
+            var vm = new CourseFormViewModel
+            {
+                Id = course.Id,
+                Name = course.Name,
+                MinDegree = course.MinDegree,
+                DepartmentId = course.DepartmentId,
+                InstructorId = course.InstructorId
+            };
+
+            ViewBag.Departments = new SelectList(_departmentBl.GetAll(), "Id", "Name", vm.DepartmentId);
+            ViewBag.Instructors = new SelectList(_instructorBl.GetAll(), "Id", "Name", vm.InstructorId);
+            return View(vm);
         }
 
         [HttpPost]
-        public IActionResult Edit(Course course)
+        public IActionResult Edit(CourseFormViewModel vm)
         {
-            if (course.InstructorId.HasValue)
-            {
-                var instructor = _instructorBl.GetById(course.InstructorId.Value);
-                if (instructor == null || instructor.DepartmentId != course.DepartmentId)
-                {
-                    ModelState.AddModelError("InstructorId", "The instructor must belong to the selected department");
-                }
-            }
-
             if (!ModelState.IsValid)
             {
-                ViewBag.Departments = _departmentBl.GetAll();
-                ViewBag.Instructors = _instructorBl.GetByDepartmentId(course.DepartmentId);
-                return View(course);
+                ViewBag.Departments = new SelectList(_departmentBl.GetAll(), "Id", "Name", vm.DepartmentId);
+                ViewBag.Instructors = new SelectList(_instructorBl.GetAll(), "Id", "Name", vm.InstructorId);
+                return View(vm);
             }
+
+            var course = _courseBl.GetById(vm.Id);
+            if (course == null) return NotFound();
+
+            course.Name = vm.Name;
+            course.MinDegree = vm.MinDegree;
+            course.DepartmentId = vm.DepartmentId;
+            course.InstructorId = vm.InstructorId;
 
             _courseBl.Update(course);
             TempData["SuccessMessage"] = "Course updated successfully";
             return RedirectToAction("Index");
         }
-
         public IActionResult Delete(int id)
         {
             var course = _courseBl.GetById(id);
@@ -158,6 +162,3 @@ namespace TASK_2.Controllers
 
     }
 }
-
-
-

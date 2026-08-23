@@ -13,7 +13,6 @@ namespace DataAccessLayer.Models
         [Required]
         public string Name { get; set; }
       
-        public string? ManagerName { get; set; }
 
         public int? ManagerId { get; set; }
         public Instructor? Manager { get; set; }

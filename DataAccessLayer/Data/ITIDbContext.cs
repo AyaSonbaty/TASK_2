@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace DataAccessLayer.Data
 {
-    public class ITIDbContext: IdentityDbContext<AppUser>
+    public class ITIDbContext : IdentityDbContext<AppUser>
     {
 
         public ITIDbContext(DbContextOptions<ITIDbContext> options) : base(options)
@@ -66,9 +66,9 @@ namespace DataAccessLayer.Data
                 .HasForeignKey(tc => tc.CourseId);
 
             modelBuilder.Entity<Department>().HasData(
-                new Department { Id = 1, Name = "Computer Science", ManagerName = "Dr. Ahmed" },
-                new Department { Id = 2, Name = "Information Technology", ManagerName = "Dr. Sara" },
-                new Department { Id = 3, Name = "Business Administration", ManagerName = "Dr. Omar" }
+                new Department { Id = 1, Name = "Computer Science" },
+                new Department { Id = 2, Name = "Information Technology" },
+                new Department { Id = 3, Name = "Business Administration" }
             );
             modelBuilder.Entity<Instructor>().HasData(
             new Instructor { Id = 1, Name = "Mostafa Kamel", Address = "Damietta", Salary = 12000, DepartmentId = 1 },
@@ -79,5 +79,3 @@ namespace DataAccessLayer.Data
         }
     }
 }
-
-

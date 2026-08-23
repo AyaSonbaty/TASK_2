@@ -52,35 +52,24 @@ namespace TASK_2.Controllers
             var department = _departmentBl.GetById(id);
             if (department == null) return NotFound();
 
-            // Manager must belong to this department
-            ViewBag.Instructors = _departmentBl.GetInstructorsInDepartment(id);
-
             var vm = new DepartmentViewModel
             {
                 Id = department.Id,
                 Name = department.Name,
-                ManagerName = department.ManagerName,
                 ManagerId = department.ManagerId
             };
 
-            return View(vm);   // ← لازم ViewModel مش Entity
+            ViewBag.Instructors = _departmentBl.GetNotManager(department.Id);
+
+            return View(vm);
         }
 
         [HttpPost]
         public IActionResult Edit(DepartmentViewModel vm)
         {
-            if (vm.ManagerId.HasValue)
-            {
-                var instructors = _departmentBl.GetInstructorsInDepartment(vm.Id);
-                if (!instructors.Any(i => i.Id == vm.ManagerId.Value))
-                {
-                    ModelState.AddModelError("ManagerId", "Manager must be an instructor in this department");
-                }
-            }
-
             if (!ModelState.IsValid)
             {
-                ViewBag.Instructors = _departmentBl.GetInstructorsInDepartment(vm.Id);
+                ViewBag.Instructors = _departmentBl.GetNotManager(vm.Id);
                 return View(vm);
             }
 
@@ -122,4 +111,3 @@ namespace TASK_2.Controllers
         }
     }
 }
-

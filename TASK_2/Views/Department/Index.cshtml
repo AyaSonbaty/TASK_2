@@ -32,7 +32,7 @@
             <tr>
                 <td>@dept.Id</td>
                 <td>@dept.Name</td>
-                <td>@dept.ManagerName</td>
+                <td>@(dept.Manager?.Name ?? "No Manager")</td>
                 <td>
                     <a asp-controller="Instructor" asp-action="ByDepartment" asp-route-id="@dept.Id"
                        class="btn btn-primary btn-sm">Show Instructors</a>
