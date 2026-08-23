@@ -1,7 +1,10 @@
 using BLLayer.Interfaces;
 using BLLayer.Services;
 using DataAccessLayer.Data;
+using DataAccessLayer.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,14 @@ builder.Services.AddScoped<IInstructorBl, InstructorBL>();
 builder.Services.AddScoped<ICourseBL, CourseBL>();
 builder.Services.AddScoped<ITraneeBl, TraneeBL>();
 builder.Services.AddScoped<ITraneeCourseBl, TraneeCourseBL>();
+
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+})
+    .AddEntityFrameworkStores<ITIDbContext>()
+    .AddDefaultTokenProviders();
 
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
@@ -41,6 +52,7 @@ app.UseRouting();
 
 app.UseSession();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
@@ -48,3 +60,5 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+

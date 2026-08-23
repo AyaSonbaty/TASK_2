@@ -15,6 +15,8 @@ namespace DataAccessLayer.Models
         public string Name { get; set; }
         [Required]
         public string Address { get; set; }
+
+        [Range(1, double.MaxValue, ErrorMessage = "salary must be greater than zero")]
         public decimal Salary { get; set; }
 
         public int DepartmentId { get; set; }

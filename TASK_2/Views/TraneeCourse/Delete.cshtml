@@ -1,0 +1,27 @@
+﻿@model DataAccessLayer.Models.TraneeCourse
+
+@{
+    ViewData["Title"] = "Delete Registration";
+}
+
+<h1>Remove Trainee Registration</h1>
+
+<div class="alert alert-warning">Are you sure you want to remove this registration? This cannot be undone.</div>
+
+<div class="card mb-4" style="max-width: 500px;">
+    <div class="card-body">
+        <p class="card-text"><strong>Trainee:</strong> @Model.Tranee?.Name</p>
+        <p class="card-text"><strong>Course:</strong> @Model.Course?.Name</p>
+        <p class="card-text"><strong>Grade:</strong> @Model.Grade</p>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" name="traneeId" value="@Model.TraneeId" />
+    <input type="hidden" name="courseId" value="@Model.CourseId" />
+    <input type="hidden" name="confirm" value="true" />
+    <button type="submit" class="btn btn-danger">Yes, Remove</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
+
+

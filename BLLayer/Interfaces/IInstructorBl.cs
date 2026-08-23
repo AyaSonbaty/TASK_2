@@ -11,6 +11,8 @@ namespace BLLayer.Interfaces
 
     {
         List<Instructor> GetByDepartmentId(int departmentId);
+        bool HasCourses(int instructorId);
+        bool IsManagerOfDepartment(int instructorId);
 
     }
 }

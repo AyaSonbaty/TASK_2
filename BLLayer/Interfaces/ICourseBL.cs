@@ -9,5 +9,7 @@ namespace BLLayer.Interfaces
 {
     public interface ICourseBL:IBasicOperation<Course>
     {
+        bool HasTranees(int courseId);
+
     }
 }

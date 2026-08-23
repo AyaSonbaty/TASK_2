@@ -57,6 +57,32 @@ namespace TASK_2.Controllers
             TempData["SuccessMessage"] = "Department updated successfully";
             return RedirectToAction("Index");
         }
+        public IActionResult Delete(int id)
+        {
+            var department = _departmentBl.GetById(id);
+            if (department == null) return NotFound();
+
+            if (_departmentBl.HasInstructorsOrCourses(id))
+            {
+                ViewBag.BlockedMessage = "This department still has instructors or courses linked to it. Remove them first before deleting the department.";
+            }
+
+            return View(department);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id, bool confirm)
+        {
+            if (_departmentBl.HasInstructorsOrCourses(id))
+            {
+                TempData["ErrorMessage"] = "Cannot delete this department while it still has instructors or courses linked to it.";
+                return RedirectToAction("Index");
+            }
+
+            _departmentBl.Delete(id);
+            TempData["SuccessMessage"] = "Department deleted successfully";
+            return RedirectToAction("Index");
+        }
     }
 }
 

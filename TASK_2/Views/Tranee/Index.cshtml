@@ -10,6 +10,10 @@
 {
     <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
 
 <a asp-action="Create" class="btn btn-success mb-3">+ Add Trainee</a>
 
@@ -30,7 +34,9 @@
                 <td>@tranee.Name</td>
                 <td>@tranee.Address</td>
                 <td>
+                    <a asp-action="Details" asp-route-id="@tranee.Id" class="btn btn-sm btn-info">Details</a>
                     <a asp-action="Edit" asp-route-id="@tranee.Id" class="btn btn-sm btn-warning">Edit</a>
+                    <a asp-action="Delete" asp-route-id="@tranee.Id" class="btn btn-sm btn-danger">Delete</a>
                 </td>
             </tr>
         }

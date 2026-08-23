@@ -14,23 +14,24 @@
     <div class="mb-3">
         <label>Course Name</label>
         <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Min Degree</label>
         <input asp-for="MinDegree" class="form-control" />
+        <span asp-validation-for="MinDegree" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
         <label>Department</label>
         <select asp-for="DepartmentId" class="form-control">
-                <option value="">-- Select Instructor --</option>   
-
             @foreach (var dept in ViewBag.Departments)
             {
                 <option value="@dept.Id">@dept.Name</option>
             }
         </select>
+        <span asp-validation-for="DepartmentId" class="text-danger"></span>
     </div>
 
     <div class="mb-3">
@@ -41,6 +42,7 @@
                 <option value="@inst.Id">@inst.Name</option>
             }
         </select>
+        <span asp-validation-for="InstructorId" class="text-danger"></span>
     </div>
 
     <button type="submit" class="btn btn-primary">Save Changes</button>

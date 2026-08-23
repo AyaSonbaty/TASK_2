@@ -13,5 +13,7 @@ namespace BLLayer.Interfaces
         TraneeCourse GetById(int traneeId, int courseId);
         void Add(TraneeCourse entity);
         void Update(TraneeCourse entity);
+        void Delete(int traneeId, int courseId);
+
     }
 }

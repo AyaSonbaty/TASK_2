@@ -45,5 +45,24 @@ public class InstructorBL : IInstructorBl
         _dbContext.Instructors.Update(entity);
         _dbContext.SaveChanges();
     }
+    public bool HasCourses(int instructorId)
+    {
+        return _dbContext.Courses.Any(c => c.InstructorId == instructorId);
+    }
+
+    public bool IsManagerOfDepartment(int instructorId)
+    {
+        return _dbContext.Departments.Any(d => d.ManagerId == instructorId);
+    }
+
+    public void Delete(int id)
+    {
+        var instructor = _dbContext.Instructors.Find(id);
+        if (instructor is not null)
+        {
+            _dbContext.Instructors.Remove(instructor);
+            _dbContext.SaveChanges();
+        }
+    }
 }
 

@@ -106,8 +106,34 @@ namespace TASK_2.Controllers
             TempData["SuccessMessage"] = "Course updated successfully";
             return RedirectToAction("Index");
         }
+        public IActionResult Delete(int id)
+        {
+            var course = _courseBl.GetById(id);
+            if (course == null) return NotFound();
 
-        
+            if (_courseBl.HasTranees(id))
+            {
+                ViewBag.BlockedMessage = "This course still has trainees registered in it. Remove those registrations first.";
+            }
+
+            return View(course);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id, bool confirm)
+        {
+            if (_courseBl.HasTranees(id))
+            {
+                TempData["ErrorMessage"] = "Cannot delete this course while trainees are still registered in it.";
+                return RedirectToAction("Index");
+            }
+
+            _courseBl.Delete(id);
+            TempData["SuccessMessage"] = "Course deleted successfully";
+            return RedirectToAction("Index");
+        }
+
+
     }
 }
 

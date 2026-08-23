@@ -1,0 +1,17 @@
+﻿@model DataAccessLayer.Models.Tranee
+
+@{
+    ViewData["Title"] = "Trainee Details";
+}
+
+<h1>Trainee Details</h1>
+
+<div class="card" style="max-width: 500px;">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Name</h5>
+        <p class="card-text"><strong>Id:</strong> @Model.Id</p>
+        <p class="card-text"><strong>Address:</strong> @Model.Address</p>
+    </div>
+</div>
+
+<a asp-action="Index" class="btn btn-secondary btn-sm mt-3">&larr; Back</a>

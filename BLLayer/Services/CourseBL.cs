@@ -47,8 +47,22 @@ namespace BLLayer.Services
             _dbContext.Courses.Update(entity);
             _dbContext.SaveChanges();
         }
+        public bool HasTranees(int courseId)
+        {
+            return _dbContext.TraneeCourses.Any(tc => tc.CourseId == courseId);
+        }
 
-        
+        public void Delete(int id)
+        {
+            var course = _dbContext.Courses.Find(id);
+            if (course is not null)
+            {
+                _dbContext.Courses.Remove(course);
+                _dbContext.SaveChanges();
+            }
+        }
+
+
     }
 }
 

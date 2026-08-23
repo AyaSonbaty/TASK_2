@@ -5,11 +5,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 
 namespace DataAccessLayer.Data
 {
-    public class ITIDbContext:DbContext
+    public class ITIDbContext: IdentityDbContext<AppUser>
     {
 
         public ITIDbContext(DbContextOptions<ITIDbContext> options) : base(options)
@@ -24,6 +25,8 @@ namespace DataAccessLayer.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Instructor>()
                 .HasOne(i => i.Department)
                 .WithMany(d => d.Instructors)

@@ -7,9 +7,19 @@
 
 <h1>Instructors in @deptName</h1>
 
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
 <a asp-controller="Department" asp-action="Index" class="btn btn-secondary btn-sm mb-3">
     &larr; Back to Departments
 </a>
+<a asp-controller="Instructor" asp-action="Create" class="btn btn-success btn-sm mb-3">+ Add Instructor</a>
 
 @if (!Model.Any())
 {
@@ -40,11 +50,17 @@ else
                            class="btn btn-info btn-sm">
                             Details
                         </a>
+                        <a asp-controller="Instructor" asp-action="Edit" asp-route-id="@instructor.Id"
+                           class="btn btn-warning btn-sm">
+                            Edit
+                        </a>
+                        <a asp-controller="Instructor" asp-action="Delete" asp-route-id="@instructor.Id"
+                           class="btn btn-danger btn-sm">
+                            Delete
+                        </a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
 }
-
-

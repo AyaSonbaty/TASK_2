@@ -34,4 +34,24 @@ public class DepartmentBL : IDepartmentBl
         _dbContext.Departments.Update(entity);
         _dbContext.SaveChanges();
     }
-}
+    public bool HasInstructorsOrCourses(int departmentId)
+    {
+        return _dbContext.Instructors.Any(i => i.DepartmentId == departmentId)
+            || _dbContext.Courses.Any(c => c.DepartmentId == departmentId);
+    }
+
+    public List<Instructor> GetInstructorsInDepartment(int departmentId)
+    {
+        return _dbContext.Instructors.Where(i => i.DepartmentId == departmentId).ToList();
+    }
+
+    public void Delete(int id)
+    {
+        var department = _dbContext.Departments.Find(id);
+        if (department is not null)
+        {
+            _dbContext.Departments.Remove(department);
+            _dbContext.SaveChanges();
+        }
+    }
+    }

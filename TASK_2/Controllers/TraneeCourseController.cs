@@ -69,5 +69,20 @@ namespace TASK_2.Controllers
             TempData["SuccessMessage"] = "Grade updated successfully";
             return RedirectToAction("Index");
         }
+        public IActionResult Delete(int traneeId, int courseId)
+        {
+            var traneeCourse = _traneeCourseBl.GetById(traneeId, courseId);
+            if (traneeCourse == null) return NotFound();
+
+            return View(traneeCourse);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int traneeId, int courseId, bool confirm)
+        {
+            _traneeCourseBl.Delete(traneeId, courseId);
+            TempData["SuccessMessage"] = "Registration removed successfully";
+            return RedirectToAction("Index");
+        }
     }
 }

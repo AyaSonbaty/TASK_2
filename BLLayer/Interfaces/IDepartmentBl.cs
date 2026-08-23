@@ -10,5 +10,7 @@ namespace BLLayer.Interfaces
     public interface IDepartmentBl: IBasicOperation<Department>
 
     {
+        bool HasInstructorsOrCourses(int departmentId);
+        List<Instructor> GetInstructorsInDepartment(int departmentId);
     }
 }

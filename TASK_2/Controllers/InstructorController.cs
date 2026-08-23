@@ -72,5 +72,39 @@ namespace TASK_2.Controllers
             TempData["SuccessMessage"] = "Instructor updated successfully";
             return RedirectToAction("ByDepartment", new { id = instructor.DepartmentId });
         }
+        public IActionResult Delete(int id)
+        {
+            var instructor = _instructorBl.GetById(id);
+            if (instructor == null) return NotFound();
+
+            if (_instructorBl.HasCourses(id))
+            {
+                ViewBag.BlockedMessage = "This instructor still teaches one or more courses. Reassign or remove those courses first.";
+            }
+            else if (_instructorBl.IsManagerOfDepartment(id))
+            {
+                ViewBag.BlockedMessage = "This instructor is the manager of a department. Assign a different manager first.";
+            }
+
+            return View(instructor);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id, bool confirm)
+        {
+            var instructor = _instructorBl.GetById(id);
+            if (instructor == null) return NotFound();
+
+            if (_instructorBl.HasCourses(id) || _instructorBl.IsManagerOfDepartment(id))
+            {
+                TempData["ErrorMessage"] = "Cannot delete this instructor while they teach courses or manage a department.";
+                return RedirectToAction("ByDepartment", new { id = instructor.DepartmentId });
+            }
+
+            int departmentId = instructor.DepartmentId;
+            _instructorBl.Delete(id);
+            TempData["SuccessMessage"] = "Instructor deleted successfully";
+            return RedirectToAction("ByDepartment", new { id = departmentId });
+        }
     }
 }

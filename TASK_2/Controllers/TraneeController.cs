@@ -63,5 +63,31 @@ namespace TASK_2.Controllers
             TempData["SuccessMessage"] = "Trainee updated successfully";
             return RedirectToAction("Index");
         }
-    }
+        public IActionResult Delete(int id)
+        {
+            var tranee = _traneeBl.GetById(id);
+            if (tranee == null) return NotFound();
+
+            if (_traneeBl.HasCourses(id))
+            {
+                ViewBag.BlockedMessage = "This trainee is still registered in one or more courses. Remove those registrations first.";
+            }
+
+            return View(tranee);
+        }
+
+        [HttpPost]
+        public IActionResult Delete(int id, bool confirm)
+        {
+            if (_traneeBl.HasCourses(id))
+            {
+                TempData["ErrorMessage"] = "Cannot delete this trainee while they are still registered in courses.";
+                return RedirectToAction("Index");
+            }
+
+            _traneeBl.Delete(id);
+            TempData["SuccessMessage"] = "Trainee deleted successfully";
+            return RedirectToAction("Index");
+        }
+        }
 }
