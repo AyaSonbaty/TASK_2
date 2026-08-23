@@ -38,7 +38,7 @@
             <option value="">-- Select Instructor --</option>
             @foreach (var inst in ViewBag.Instructors)
             {
-                <option value="@inst.Id">@inst.Name</option>
+                <option value="@inst.Id">@inst.Name - (@inst.Department?.Name)</option>
             }
         </select>
         <span asp-validation-for="InstructorId" class="text-danger"></span>
@@ -49,3 +49,6 @@
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }
+
+
+

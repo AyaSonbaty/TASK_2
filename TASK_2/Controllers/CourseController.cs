@@ -127,6 +127,7 @@ namespace TASK_2.Controllers
             TempData["SuccessMessage"] = "Course updated successfully";
             return RedirectToAction("Index");
         }
+
         public IActionResult Delete(int id)
         {
             var course = _courseBl.GetById(id);
